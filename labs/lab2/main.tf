@@ -1,0 +1,99 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
+}
+
+provider "aws" {
+  region  = "us-east-1"
+  profile = "default"
+}
+
+data "aws_caller_identity" "current" {}
+
+
+resource "aws_iam_user" "demo" {
+  name = "demo"
+  path = "/demo/"
+  force_destroy = true
+}
+
+resource "aws_iam_access_key" "demo" {
+  user = aws_iam_user.demo.name
+}
+
+resource "aws_iam_user_policy" "IAM" {
+  name = "IAM"
+  user = aws_iam_user.demo.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action   = "sts:AssumeRole"
+        Effect   = "Allow"
+        Resource = [
+          aws_iam_role.OrganizationAccountAccessRole.arn
+        ]
+      },
+    ]
+  })
+}
+
+resource "aws_iam_user_policy" "consolePasswordPolicy" {
+  name = "consolePassword"
+  user = aws_iam_user.demo.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "iam:CreateLoginProfile",
+        ]
+        Effect   = "Allow"
+        Resource = "arn:aws:iam::*:user/demo/$${aws:username}"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_user_policy_attachment" "demoIAMRead" {
+  user       = aws_iam_user.demo.name
+  policy_arn = "arn:aws:iam::aws:policy/IAMReadOnlyAccess"
+}
+
+resource "aws_iam_role" "OrganizationAccountAccessRole" {
+  name                  = "OrganizationAccountAccessRole"
+  path                  = "/"
+  description           = ""
+  force_detach_policies = false
+  managed_policy_arns   = ["arn:aws:iam::aws:policy/AdministratorAccess"]
+  max_session_duration  = 3600
+
+  assume_role_policy = jsonencode(
+    {
+      Statement = [
+        {
+          Action = "sts:AssumeRole"
+          Effect = "Allow"
+          Principal = {
+            AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+          }
+        },
+      ]
+      Version = "2012-10-17"
+    }
+  )
+}
+
+output "iam_user_key" {
+	value = aws_iam_access_key.demo.id
+}
+
+output "iam_user_secret" {
+	value = nonsensitive(aws_iam_access_key.demo.secret)
+}
