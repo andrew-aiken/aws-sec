@@ -18,7 +18,7 @@ Copy the outputs that look like similar to the following and past them into a ne
 ```sh
 export AWS_ACCESS_KEY_ID=XXXXXXXXXX
 
-export AWS_SECRET_ACCESS_KEY=YYYYYYYYY
+export AWS_SECRET_ACCESS_KEY=YYYYYYYYYYYYYYYYYYYYYYYY
 ```
 
 ## Destroy
