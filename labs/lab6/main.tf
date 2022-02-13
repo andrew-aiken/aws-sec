@@ -53,7 +53,8 @@ resource "aws_iam_user_policy" "RolyPoly" {
       {
         Action = [
           "iam:PassRole",
-          "iam:AttachRolePolicy"
+          "iam:AttachRolePolicy",
+          "ssm:StartSession"
         ]
         Effect   = "Allow"
         Resource = "*"
@@ -73,7 +74,7 @@ resource "aws_iam_user_policy_attachment" "ec2-developer" {
 }
 
 resource "aws_iam_role" "AdministrativeRole" {
-  name               = "Administrative"
+  name               = "EC2-demo-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -102,15 +103,34 @@ resource "aws_iam_role_policy_attachment" "AdministrativeRolePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/IAMFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "SSMRolePolicy" {
+  role       = aws_iam_role.AdministrativeRole.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+}
+
+
+resource "aws_iam_role_policy_attachment" "SSMRolePolicyCore" {
+  role       = aws_iam_role.AdministrativeRole.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_instance" "demo" {
+  ami                  = "ami-033b95fb8079dc481"
+  instance_type        = "t2.micro"
+  iam_instance_profile = aws_iam_instance_profile.AdministrativeRoleProfile.name
+  tags = {
+    Name = "demo-ec2"
+  }
+}
 
 output "account_id" {
   value = data.aws_caller_identity.current.account_id
 }
 
 output "iam_user_key" {
-	value = aws_iam_access_key.demo.id
+	value = "export AWS_ACCESS_KEY_ID=${aws_iam_access_key.demo.id}"
 }
 
 output "iam_user_secret" {
-	value = nonsensitive(aws_iam_access_key.demo.secret)
+	value = "export AWS_SECRET_ACCESS_KEY=${nonsensitive(aws_iam_access_key.demo.secret)}"
 }

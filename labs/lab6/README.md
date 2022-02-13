@@ -26,3 +26,9 @@ aws iam attach-user-policy --user-name demo --policy-arn arn:aws:iam::aws:policy
 ```
 
 https://aws.amazon.com/premiumsupport/knowledge-center/install-ssm-agent-ec2-linux/
+
+```sh
+aws ssm start-session --target i-abcd1234
+```
+
+https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-linux

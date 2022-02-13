@@ -12,6 +12,8 @@ provider "aws" {
   profile = "default"
 }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_iam_user" "demo" {
   name = "demo"
   path = "/demo/"
@@ -75,10 +77,14 @@ resource "aws_iam_role_policy_attachment" "AdministrativeRolePolicy" {
 }
 
 
+output "account_id" {
+  value = data.aws_caller_identity.current.account_id
+}
+
 output "iam_user_key" {
-	value = aws_iam_access_key.demo.id
+	value = "export AWS_ACCESS_KEY_ID=${aws_iam_access_key.demo.id}"
 }
 
 output "iam_user_secret" {
-	value = nonsensitive(aws_iam_access_key.demo.secret)
+	value = "export AWS_SECRET_ACCESS_KEY=${nonsensitive(aws_iam_access_key.demo.secret)}"
 }
