@@ -32,15 +32,15 @@ The roles has administrator permissions and can be used on lambda functions, let
 
 ```txt
 "AssumeRolePolicyDocument": {
-	"Version": "2012-10-17",
+    "Version": "2012-10-17",
     "Statement": [
         {
-			"Sid": "",
-			"Effect": "Allow",
-			"Principal": {
-				"Service": "lambda.amazonaws.com"
-			},
-			"Action": "sts:AssumeRole"
+            "Sid": "",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "lambda.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
         }
     ]
 },
