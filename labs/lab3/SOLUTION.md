@@ -24,7 +24,7 @@ aws iam get-policy --policy-arn arn:aws:iam::ACCOUNT_ID:policy/developerPermissi
 
 It looks like we have access to change policy versions and the developerPermissions seems to have several versions.
 
-Lets list the versions and look at the different version permissionns.
+Lets list the versions and look at the different version permissions.
 
 ```sh
 aws iam list-policy-versions --policy-arn arn:aws:iam::ACCOUNT_ID:policy/developerPermissions

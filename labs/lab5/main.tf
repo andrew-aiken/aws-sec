@@ -14,7 +14,6 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-
 resource "aws_iam_user" "demo" {
   name = "demo"
   path = "/demo/"
@@ -35,6 +34,28 @@ resource "aws_iam_user_policy" "consolePasswordPolicy" {
       {
         Action = [
           "iam:CreateLoginProfile",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_user_policy" "updateAccessKey" {
+  name = "updateAccessKey"
+  user = aws_iam_user.demo.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "iam:DeleteAccessKey",
+          "iam:GetAccessKeyLastUsed",
+          "iam:UpdateAccessKey",
+          "iam:CreateAccessKey",
+          "iam:ListAccessKeys"
         ]
         Effect   = "Allow"
         Resource = "*"

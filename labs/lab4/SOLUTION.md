@@ -30,7 +30,7 @@ aws iam list-attached-role-policies --role-name Administrative
 
 The roles has administrator permissions and can be used on lambda functions, lets pivot from this.
 
-```txt
+```json
 "AssumeRolePolicyDocument": {
     "Version": "2012-10-17",
     "Statement": [
