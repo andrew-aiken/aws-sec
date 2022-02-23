@@ -1,4 +1,4 @@
-# EC2 with higher permissions
+# EC2 Lab
 
 ## Setup the environment
 

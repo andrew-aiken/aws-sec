@@ -1,4 +1,4 @@
-# AWS POLICY VERSION
+# AWS Policy Version
 
 The goal in all of the labs will be to achieve administrative permissions in the aws account.
 
