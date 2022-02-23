@@ -1,34 +1,30 @@
-# ec2 with higher permissions
+# EC2 with higher permissions
 
-Setup aws environment
+## Setup the environment
+
+Configured to use the aws profile `default` when building the infrastructure.
+
+Instructions on how to setup the cli [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
 
 ```sh
 terraform init
 terraform apply -auto-approve
 ```
 
-Console password setup
+Copy the outputs that look like similar to the following and past them into a new terminal shell.
 
 ```sh
-aws iam create-login-profile --user-name demo --password 'My!User1Login8P@ssword'
+export AWS_ACCESS_KEY_ID=XXXXXXXXXX
+
+export AWS_SECRET_ACCESS_KEY=YYYYYYYYYYYYYYYYY
 ```
 
-https://docs.aws.amazon.com/codedeploy/latest/userguide/instances-ec2-create.html#instances-ec2-create-cli
+## Destroy
 
-Create a key pair to allow you to ssh into the instance.
+All resources created by you outside of the terraform is your responsibility to remove.
 
-Attach the role () to the instance
+Make sure to remove roles attacked to user account before running the following command, else it will fail.
 
 ```sh
-ssh ec2-user@54.236.48.188 -i foo-demo.pem
-
-aws iam attach-user-policy --user-name demo --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
+terraform destroy -auto-approve
 ```
-
-https://aws.amazon.com/premiumsupport/knowledge-center/install-ssm-agent-ec2-linux/
-
-```sh
-aws ssm start-session --target i-abcd1234
-```
-
-https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-linux
