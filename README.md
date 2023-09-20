@@ -1,3 +1,8 @@
+# Archived
+
+Checkout [CloudGoat](https://github.com/RhinoSecurityLabs/cloudgoat/) for maintained versions of AWS security labs.
+
+
 # AWS SECURITY
 
 [![aws-sec](https://img.shields.io/badge/version-1.0-green?style=flat)](https://github.com/andrew-aiken/aws-sec)
